@@ -275,4 +275,58 @@ booker.put("/publication/update/book/:isbn", (req, res) => {
     message: "successfully updated publication",
   });
 });
+
+/*
+route               /book/delete
+description         delete a book
+access              public
+parameter           isbn
+methods             delete
+*/
+
+booker.delete("/book/delete/:isbn", (req, res) => {
+  const updatedBookDb = database.books.filter(
+    (book) => book.isbn !== req.params.isbn
+  );
+
+  database.books = updatedBookDb;
+  return res.json({ books: database.books });
+});
+
+/*
+route               /book/delete/author
+description         delete an author from a book
+access              public
+parameter           isbn, author id
+methods             delete
+*/
+
+booker.delete("/book/delete/author/:isbn/:authorID", (req, res) => {
+  //update the book database
+  database.books.forEach((book) => {
+    if (book.isbn === req.params.isbn) {
+      const newAuthorList = book.author.filter(
+        (author) => author !== parseInt(req.params.authorID)
+      );
+      book.author = newAuthorList;
+      return;
+    }
+  });
+  // update the author database
+  database.authors.forEach((author) => {
+    if (author.id === parseInt(req.params.authorID)) {
+      const newBookList = author.books.filter(
+        (book) => book !== req.params.isbn
+      );
+      author.books = newBookList;
+      return;
+    }
+  });
+  return res.json({
+    message: "author was deleted 😍",
+    books: database.books,
+    authors: database.authors,
+  });
+});
+
 booker.listen(7777, () => console.log("Server is running...🚀🚀"));
