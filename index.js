@@ -1,5 +1,6 @@
+require("dotenv").config();
 const express = require("express");
-
+const mongoose = require("mongoose");
 // initialization
 const booker = express();
 
@@ -7,6 +8,9 @@ const booker = express();
 booker.use(express.json());
 
 // import database
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => console.log("connection established with database! 😍😎"));
 const database = require("./database");
 
 /*
