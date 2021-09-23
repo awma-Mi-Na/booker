@@ -15,6 +15,6 @@ const BookSchema = mongoose.Schema({
 // create model
 const BookModel = mongoose.model("books", BookSchema);
 
-export default BookModel;
+module.exports = BookModel;
 
 // we are making seperate file for each schema because its cleaner and easier to maintain
