@@ -11,7 +11,7 @@ booker.use(express.json());
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => console.log("connection established with database! 😍😎"));
-const database = require("./database");
+const database = require("./database/database");
 
 /*
 route               /isbn
