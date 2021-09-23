@@ -1,8 +1,7 @@
-// note the import syntax is an ES6 syntax
-import { Schema, Model } from "mongoose";
+const mongoose = require("mongoose");
 
 // create schema of book
-const BookSchema = Schema({
+const BookSchema = mongoose.Schema({
   isbn: String,
   title: String,
   pubDate: String,
@@ -14,7 +13,7 @@ const BookSchema = Schema({
 });
 
 // create model
-const BookModel = Model(BookSchema);
+const BookModel = mongoose.model("books", BookSchema);
 
 export default BookModel;
 

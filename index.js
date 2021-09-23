@@ -7,11 +7,18 @@ const booker = express();
 // configuration
 booker.use(express.json());
 
-// import database
+// connection with mongoDB
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => console.log("connection established with database! 😍😎"));
+
+// import database
 const database = require("./database/database");
+
+// creating models
+const BookModels = require("./database/book");
+const AuthorModels = require("./database/author");
+const PublicationModels = require("./database/publication");
 
 /*
 route               /isbn
