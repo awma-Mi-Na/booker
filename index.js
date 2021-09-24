@@ -284,21 +284,44 @@ access              public
 parameter           isbn
 methods             put
 */
-booker.put("/book/update/author/:isbn/:authorID", (req, res) => {
+booker.put("/book/update/author/:isbn/:authorID", async (req, res) => {
   // update book database
-  database.books.forEach((book) => {
-    if (book.isbn === req.params.isbn) {
-      return book.author.push(parseInt(req.params.authorID));
-    }
-  });
-  // update author database
-  database.authors.forEach((author) => {
-    if (author.id === parseInt(req.params.authorID)) {
-      return author.books.push(req.params.isbn);
-    }
-  });
 
-  return res.json({ books: database.books, author: database.authors });
+  const updatedBook = await BookModel.findOneAndUpdate(
+    { isbn: req.params.isbn },
+    {
+      $addToSet: {
+        author: req.params.authorID,
+      },
+    },
+    { new: true }
+  );
+
+  // database.books.forEach((book) => {
+  //   if (book.isbn === req.params.isbn) {
+  //     return book.author.push(parseInt(req.params.authorID));
+  //   }
+  // });
+
+  // update author database
+
+  const updatedAuthor = await AuthorModel.findOneAndUpdate(
+    { id: req.params.authorID },
+    {
+      $addToSet: {
+        books: req.params.isbn,
+      },
+    },
+    { new: true }
+  );
+
+  // database.authors.forEach((author) => {
+  //   if (author.id === parseInt(req.params.authorID)) {
+  //     return author.books.push(req.params.isbn);
+  //   }
+  // });
+
+  return res.json({ books: updatedBook, author: updatedAuthor });
 });
 
 /*
