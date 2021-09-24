@@ -262,14 +262,19 @@ access              public
 parameter           isbn
 methods             put
 */
-booker.put("/book/update/title/:isbn", (req, res) => {
-  database.books.forEach((book) => {
-    if (book.isbn === req.params.isbn) {
-      book.title = req.body.newBookTitle;
-      return;
-    }
-  });
-  return res.json({ books: database.books });
+booker.put("/book/update/title/:isbn", async (req, res) => {
+  const updatedBook = await BookModel.findOneAndUpdate(
+    { isbn: req.params.isbn },
+    { title: req.body.newBookTitle },
+    { new: true }
+  );
+  // database.books.forEach((book) => {
+  //   if (book.isbn === req.params.isbn) {
+  //     book.title = req.body.newBookTitle;
+  //     return;
+  //   }
+  // });
+  return res.json({ books: updatedBook });
 });
 
 /*
