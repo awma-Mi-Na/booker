@@ -97,11 +97,15 @@ parameter           book
 methods             post
 */
 Router.post("/add", async (req, res) => {
-  const { newBook } = req.body;
-  BookModel.create(newBook); // await is not needed here because create does not return any value
+  try {
+    const { newBook } = req.body;
+    await BookModel.create(newBook); // await is not needed here because create does not return any value
 
-  // database.books.push(newBook);
-  return res.json({ books: addNewBook, message: "book added successfully" });
+    // database.books.push(newBook);
+    return res.json({ books: addNewBook, message: "book added successfully" });
+  } catch (error) {
+    return res.json({ error: error.message });
+  }
 });
 
 /*
